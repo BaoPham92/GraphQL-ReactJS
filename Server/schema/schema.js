@@ -1,14 +1,24 @@
 const graphql = require('graphql');
 const _= require('lodash');
 
-const { GraphQLObjectType, GraphQLString, GraphQLSchema } = graphql;
+const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLID } = graphql;
 
 const BusinessType = new GraphQLObjectType({
     name: 'Company',
     fields: () => ({
-        id: { type: GraphQLString },
+        id: { type: GraphQLID },
         name: { type: GraphQLString },
         fieldOfBusiness: { type: GraphQLString }
+    })
+})
+
+const EmployeeType = new GraphQLObjectType({
+    name: 'Employee',
+    fields: () => ({
+        id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        age: { type: GraphQLInt },
+        skillType: { type: GraphQLString }
     })
 })
 
@@ -17,10 +27,19 @@ const RootQuery = new GraphQLObjectType({
     fields: {
         company: {
             type: BusinessType,
-            args: {id: {type: GraphQLString}},
+            args: { id: { type: GraphQLID}},
             resolve(parent, args) {
                 // Retrieve data from db
                 return _.find(companies, {id: args.id})
+            }
+        },
+
+        employee: {
+            type: EmployeeType,
+            args: { id: { type: GraphQLID}},
+            resolve(parent, args) {
+                // Retrieve data from db
+                return _.find(employees, {id: args.id})
             }
         }
     }
@@ -32,6 +51,13 @@ var companies = [
     { id: "2", name: "Name Number 2", fieldOfBusiness: "Business: Sales" },
     { id: "3", name: "Name Number 3", fieldOfBusiness: "Business: Defense" },
     { id: "4", name: "Name Number 4", fieldOfBusiness: "Business: Media" }
+]
+
+var employees = [
+    { id: "1", name: "Employee Number 1", skillType: "Specialized Skill: Clothing", age: 17 },
+    { id: "2", name: "Employee Number 2", skillType: "Specialized Skill: Sales", age: 20 },
+    { id: "3", name: "Employee Number 3", skillType: "Specialized Skill: Defense", age: 27 },
+    { id: "4", name: "Employee Number 4", skillType: "Specialized Skill: Media", age: 16 }
 ]
 
 module.exports = new GraphQLSchema({
