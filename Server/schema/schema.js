@@ -3,7 +3,7 @@ const _ = require('lodash');
 const Company = require('../models/company.js');
 const Employee = require('../models/employee.js');
 
-const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLID, GraphQLList } = graphql;
+const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLID, GraphQLList, GraphQLNonNull } = graphql;
 
 const BusinessType = new GraphQLObjectType({
     name: 'Company',
@@ -78,10 +78,10 @@ const Mutation = new GraphQLObjectType({
         addEmployee: {
             type: EmployeeType,
             args: {
-                name: { type: GraphQLString },
-                age: { type: GraphQLInt },
-                skillType: { type: GraphQLString },
-                gender: { type: GraphQLString }
+                name: { type: new GraphQLNonNull(GraphQLString) },
+                age: { type: new GraphQLNonNull(GraphQLInt) },
+                skillType: { type: new GraphQLNonNull(GraphQLString) },
+                gender: { type: new GraphQLNonNull(GraphQLString) }
             },
             resolve(parent, args) {
                 let employee = new Employee({
@@ -97,9 +97,9 @@ const Mutation = new GraphQLObjectType({
         addCompany: {
             type: BusinessType,
             args: {
-                name: { type: GraphQLString },
-                fieldOfBusiness: { type: GraphQLString },
-                employerId: { type: GraphQLID }
+                name: { type: new GraphQLNonNull(GraphQLString) },
+                fieldOfBusiness: { type: new GraphQLNonNull(GraphQLString) },
+                employerId: { type: new GraphQLNonNull(GraphQLID) }
             },
             resolve(parent, args) {
                 let company = new Company({
