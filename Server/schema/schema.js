@@ -96,6 +96,23 @@ const Mutation = new GraphQLObjectType({
                 })
                 return employee.save();
             }
+        },
+
+        addCompany: {
+            type: BusinessType,
+            args: {
+                name: { type: GraphQLString },
+                fieldOfBusiness: { type: GraphQLString },
+                employerId: { type: GraphQLID }
+            },
+            resolve(parent, args) {
+                let company = new Company({
+                    name: args.name,
+                    fieldOfBusiness: args.fieldOfBusiness,
+                    employerId: args.employerId
+                })
+                return company.save();
+            }
         }
     }
 })
