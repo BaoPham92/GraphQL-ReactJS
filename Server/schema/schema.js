@@ -14,7 +14,7 @@ const BusinessType = new GraphQLObjectType({
         employerId: {
             type: EmployeeType,
             resolve(parent, args) {
-                // return _.find(employees, { id: parent.employeeId })
+                return Employee.findById(parent.employerId)
             }
         }
     })
@@ -31,7 +31,7 @@ const EmployeeType = new GraphQLObjectType({
         companies: {
             type: new GraphQLList(BusinessType),
             resolve(parent, args) {
-                // return _.filter(companies, { employeeId: parent.id })
+                return Company.find({ employerId: parent.id })
             }
         }
     })
@@ -44,16 +44,14 @@ const RootQuery = new GraphQLObjectType({
             type: BusinessType,
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
-                // Retrieve data from db
-                // return _.find(companies, { id: args.id })
+                return Company.findById(args.id)
             }
         },
 
         companies: {
             type: new GraphQLList(BusinessType),
             resolve(parent, args) {
-                // Retrieve data from db
-                // return companies
+                return Company.find({})
             }
         },
 
@@ -61,16 +59,14 @@ const RootQuery = new GraphQLObjectType({
             type: EmployeeType,
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
-                // Retrieve data from db
-                // return _.find(employees, { id: args.id })
+                return Employee.findById(args.id)
             }
         },
 
         employees: {
             type: new GraphQLList(EmployeeType),
             resolve(parent, args) {
-                // Retrieve data from db
-                // return employees
+                return Employee.find({})
             }
         }
     }
