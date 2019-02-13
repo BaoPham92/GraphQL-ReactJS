@@ -8,7 +8,13 @@ const BusinessType = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLID },
         name: { type: GraphQLString },
-        fieldOfBusiness: { type: GraphQLString }
+        fieldOfBusiness: { type: GraphQLString },
+        employee: {
+            type: EmployeeType,
+            resolve(parent, args) {
+                return _.find(employees, { id: parent.employeeId })
+            }
+        }
     })
 })
 
@@ -47,10 +53,10 @@ const RootQuery = new GraphQLObjectType({
 
 // Development Data
 var companies = [
-    { id: "1", name: "Name Number 1", fieldOfBusiness: "Business: Clothing" },
-    { id: "2", name: "Name Number 2", fieldOfBusiness: "Business: Sales" },
-    { id: "3", name: "Name Number 3", fieldOfBusiness: "Business: Defense" },
-    { id: "4", name: "Name Number 4", fieldOfBusiness: "Business: Media" }
+    { id: "1", name: "Name Number 1", fieldOfBusiness: "Business: Clothing", employeeId: "1" },
+    { id: "2", name: "Name Number 2", fieldOfBusiness: "Business: Sales", employeeId: "2" },
+    { id: "3", name: "Name Number 3", fieldOfBusiness: "Business: Defense", employeeId: "3" },
+    { id: "4", name: "Name Number 4", fieldOfBusiness: "Business: Media", employeeId: "4" }
 ]
 
 var employees = [
