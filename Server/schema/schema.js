@@ -1,7 +1,7 @@
 const graphql = require('graphql');
 const _= require('lodash');
 
-const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLID } = graphql;
+const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema, GraphQLID, GraphQLList } = graphql;
 
 const BusinessType = new GraphQLObjectType({
     name: 'Company',
@@ -9,7 +9,7 @@ const BusinessType = new GraphQLObjectType({
         id: { type: GraphQLID },
         name: { type: GraphQLString },
         fieldOfBusiness: { type: GraphQLString },
-        employee: {
+        employees: {
             type: EmployeeType,
             resolve(parent, args) {
                 return _.find(employees, { id: parent.employeeId })
@@ -24,7 +24,13 @@ const EmployeeType = new GraphQLObjectType({
         id: { type: GraphQLID },
         name: { type: GraphQLString },
         age: { type: GraphQLInt },
-        skillType: { type: GraphQLString }
+        skillType: { type: GraphQLString },
+        companies: {
+           type: new GraphQLList(BusinessType),
+           resolve(parent, args) {
+            return _.filter(companies, { employeeId: parent.id })
+           }
+        }
     })
 })
 
@@ -56,7 +62,11 @@ var companies = [
     { id: "1", name: "Name Number 1", fieldOfBusiness: "Business: Clothing", employeeId: "1" },
     { id: "2", name: "Name Number 2", fieldOfBusiness: "Business: Sales", employeeId: "2" },
     { id: "3", name: "Name Number 3", fieldOfBusiness: "Business: Defense", employeeId: "3" },
-    { id: "4", name: "Name Number 4", fieldOfBusiness: "Business: Media", employeeId: "4" }
+    { id: "4", name: "Name Number 4", fieldOfBusiness: "Business: Media", employeeId: "4" },
+    { id: "5", name: "Name Number 5", fieldOfBusiness: "Business: Clothing", employeeId: "2" },
+    { id: "6", name: "Name Number 6", fieldOfBusiness: "Business: Sales", employeeId: "2" },
+    { id: "7", name: "Name Number 7", fieldOfBusiness: "Business: Defense", employeeId: "3" },
+    { id: "8", name: "Name Number 8", fieldOfBusiness: "Business: Media", employeeId: "4" }
 ]
 
 var employees = [
